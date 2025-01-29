@@ -14,7 +14,7 @@ _**Experimental: requires Eleventy v3.0.1-alpha.4 and newer.**_
 
 ## Usage
 
-Install via `npm`:
+Install via [`npm` at `@11ty/font-awesome`](https://www.npmjs.com/package/@11ty/font-awesome):
 
 ```sh
 npm install @11ty/font-awesome
