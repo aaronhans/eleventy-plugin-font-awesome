@@ -26,7 +26,7 @@ Add to your configuration file:
 import fontAwesomePlugin from "@11ty/font-awesome";
 
 export default function(eleventyConfig) {
-	eleventyConfig.addPlugin(fontAwesomePlugin)
+	eleventyConfig.addPlugin(fontAwesomePlugin);
 };
 ```
 
@@ -35,8 +35,6 @@ Add the HTML markup from any of the 2000+ free icons from the Font Awesome libra
 - [Font Awesome Solid](https://fontawesome.com/search?o=r&ic=free&s=solid) (currently 1,402 icons)
 - [Font Awesome Regular](https://fontawesome.com/search?o=r&ic=free&s=regular) (currently 163 icons)
 - [Font Awesome Brands](https://fontawesome.com/search?o=r&ic=free&ip=brands) (currently 495 icons)
-
-Output the bundle:
 
 Somewhere on your page (probably in an [Eleventy Layout file](https://www.11ty.dev/docs/layouts/)), you’ll want to output the spritesheet from the [Bundle Plugin](https://www.11ty.dev/docs/plugins/bundle/):
 
