@@ -1,7 +1,10 @@
+import debugUtil from "debug";
 import matchHelper from "posthtml-match-helper";
 
 import { faIconToHtml } from "./icon-to-html.js";
 import PREFIXES from "./prefixes.js";
+
+const debug = debugUtil("Eleventy:FontAwesome");
 
 function filterAttrs(attrs = {}) {
 	if(attrs.class && typeof attrs.class === "string") {
@@ -58,23 +61,32 @@ function Transform(eleventyConfig, options = {}) {
 				tree.match(matchHelper(transformSelector), function (node) {
 					let selector = classToIconSelector(node.attrs.class);
 					if(selector) {
-						let { ref, html } = faIconToHtml(selector);
-						if(pageUrl && managers[bundleName] && html) {
-							managers[bundleName].addToPage(pageUrl, [ html ]);
+						try {
+							let { ref, html } = faIconToHtml(selector);
+							if(pageUrl && managers[bundleName] && html) {
+								managers[bundleName].addToPage(pageUrl, [ html ]);
 
-							return {
-								tag: "svg",
-								attrs: filterAttrs(node.attrs),
-								content: [
-									{
-										tag: "use",
-										attrs: {
-											href: `#${ref}`,
-											"xlink:href": `#${ref}`,
+								return {
+									tag: "svg",
+									attrs: filterAttrs(node.attrs),
+									content: [
+										{
+											tag: "use",
+											attrs: {
+												href: `#${ref}`,
+												"xlink:href": `#${ref}`,
+											}
 										}
-									}
-								]
-							};
+									]
+								};
+							}
+						} catch(e) {
+							if(options.failOnError) {
+								throw e;
+							} else {
+								debug("Could not find icon: %o (ignoring via `failOnError` option)", selector);
+								return node;
+							}
 						}
 					}
 

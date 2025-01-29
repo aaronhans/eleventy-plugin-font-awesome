@@ -7,6 +7,7 @@ export default function(eleventyConfig, pluginOptions = {}) {
 
 	let options = Object.assign({
 		sets: false,
+		failOnError: false, // only applies to transform, not shortcode
 		bundle: "fontawesome",
 		transform: "i[class]", // Selector for icons, falsy to disable
 		shortcode: false, // Optional shortcode name
