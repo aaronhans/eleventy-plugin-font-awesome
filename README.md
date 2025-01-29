@@ -132,6 +132,7 @@ export default function(eleventyConfig) {
 		transform: "i[class]", // Selector for icons, set falsy to disable the transform
 		shortcode: false, // Optional shortcode name (string), false will disable
 		bundle: "fontawesome", // Rename the Bundle Plugin name
+		failOnError: false, // Whether to fail when an icon is not found
 	})
 };
 ```
