@@ -5,20 +5,20 @@
   "main": "plugin.js",
   "description": "Optimized per-page tree-shaken SVG spritesheets for Eleventy.",
   "publishConfig": {
-		"access": "public"
-	},
-	"funding": {
-		"type": "opencollective",
-		"url": "https://opencollective.com/11ty"
-	},
-	"author": "Zach Leatherman <zachleatherman@gmail.com> (https://zachleat.com/)",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/11ty/eleventy-plugin-font-awesome.git"
-	},
-	"bugs": "https://github.com/11ty/eleventy-plugin-font-awesome/issues",
-	"homepage": "https://github.com/11ty/eleventy-plugin-font-awesome",
-	"license": "MIT",
+    "access": "public"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/11ty"
+  },
+  "author": "Zach Leatherman <zachleatherman@gmail.com> (https://zachleat.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/11ty/eleventy-plugin-font-awesome.git"
+  },
+  "bugs": "https://github.com/11ty/eleventy-plugin-font-awesome/issues",
+  "homepage": "https://github.com/11ty/eleventy-plugin-font-awesome",
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   },
