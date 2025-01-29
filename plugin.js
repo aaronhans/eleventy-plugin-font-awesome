@@ -10,6 +10,7 @@ export default function(eleventyConfig, pluginOptions = {}) {
 		bundle: "fontawesome",
 		transform: "i[class]", // Selector for icons, falsy to disable
 		shortcode: false, // Optional shortcode name
+		shortcodeClass: "",
 	}, pluginOptions);
 
 	if(!options.bundle || typeof options.bundle !== "string") {
@@ -43,7 +44,8 @@ export default function(eleventyConfig, pluginOptions = {}) {
 
 			svgBundle.addToPage(this.page.url, iconHtml);
 
-			return `<svg><use href="#${ref}" xlink:href="#${ref}"></use></svg>`;
+			let cls = options.shortcodeClass ? ` class="${options.shortcodeClass}"` : "";
+			return `<svg${cls}><use href="#${ref}" xlink:href="#${ref}"></use></svg>`;
 		});
 	}
 }
