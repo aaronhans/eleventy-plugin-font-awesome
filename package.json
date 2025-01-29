@@ -38,6 +38,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "debug": "^4.4.0",
+    "entities": "^6.0.0",
     "posthtml-match-helper": "^2.0.3"
   }
 }

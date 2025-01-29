@@ -1,6 +1,6 @@
 import { Transform } from "./src/transform.js";
 
-import { faIconToHtml } from "./src/icon-to-html.js";
+import { mergeAttrs, attrsToHtml, faIconToHtml } from "./src/icon-to-html.js";
 
 export default function(eleventyConfig, pluginOptions = {}) {
 	eleventyConfig.versionCheck(">=3.0.1-alpha.4");
@@ -11,7 +11,7 @@ export default function(eleventyConfig, pluginOptions = {}) {
 		bundle: "fontawesome",
 		transform: "i[class]", // Selector for icons, falsy to disable
 		shortcode: false, // Optional shortcode name
-		shortcodeClass: "",
+		defaultAttributes: {},
 	}, pluginOptions);
 
 	if(!options.bundle || typeof options.bundle !== "string") {
@@ -33,8 +33,7 @@ export default function(eleventyConfig, pluginOptions = {}) {
 	}
 
 	if(options.shortcode !== false) {
-		// TODO add `attrs = {}` second param
-		eleventyConfig.addShortcode(options.shortcode, function(selector) {
+		eleventyConfig.addShortcode(options.shortcode, function(selector, attrs = {}) {
 			let {ref, html: iconHtml} = faIconToHtml(selector);
 
 			let managers = eleventyConfig.getBundleManagers();
@@ -45,8 +44,8 @@ export default function(eleventyConfig, pluginOptions = {}) {
 
 			svgBundle.addToPage(this.page.url, iconHtml);
 
-			let cls = options.shortcodeClass ? ` class="${options.shortcodeClass}"` : "";
-			return `<svg${cls}><use href="#${ref}" xlink:href="#${ref}"></use></svg>`;
+			let attrStr = attrsToHtml(mergeAttrs(Object.assign({}, options.defaultAttributes), attrs));
+			return `<svg${attrStr ? ` ${attrStr}` : ""}><use href="#${ref}" xlink:href="#${ref}"></use></svg>`;
 		});
 	}
 }

@@ -133,6 +133,7 @@ export default function(eleventyConfig) {
 		shortcode: false, // Optional shortcode name (string), false will disable
 		bundle: "fontawesome", // Rename the Bundle Plugin name
 		failOnError: false, // Whether to fail when an icon is not found
+		defaultAttributes: {}, // Used in shortcode and transform <svg> output
 	})
 };
 ```

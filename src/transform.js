@@ -1,7 +1,7 @@
 import debugUtil from "debug";
 import matchHelper from "posthtml-match-helper";
 
-import { faIconToHtml } from "./icon-to-html.js";
+import { mergeAttrs, faIconToHtml } from "./icon-to-html.js";
 import PREFIXES from "./prefixes.js";
 
 const debug = debugUtil("Eleventy:FontAwesome");
@@ -46,7 +46,6 @@ function classToIconSelector(className = "") {
 
 function Transform(eleventyConfig, options = {}) {
 	let transformSelector = options.transform || "i[class]";
-
 	let bundleName = options.bundle;
 	let managers = eleventyConfig.getBundleManagers();
 	if(!managers[bundleName]) {
@@ -68,7 +67,7 @@ function Transform(eleventyConfig, options = {}) {
 
 								return {
 									tag: "svg",
-									attrs: filterAttrs(node.attrs),
+									attrs: filterAttrs(mergeAttrs(node.attrs, options.defaultAttributes)),
 									content: [
 										{
 											tag: "use",
