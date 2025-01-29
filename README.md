@@ -1,8 +1,8 @@
 # `@11ty/font-awesome`
 
-Optimized per-page tree-shaken SVG spritesheets for Eleventy.
+Optimized per-page tree-shaken SVG spritesheets for Eleventy with Font Awesome icons.
 
-_Experimental: some features require Eleventy v3.0.1-alpha.4 and newer._
+_**Experimental: requires Eleventy v3.0.1-alpha.4 and newer.**_
 
 ## Features
 
@@ -10,7 +10,7 @@ _Experimental: some features require Eleventy v3.0.1-alpha.4 and newer._
 - Driven via HTML: copy HTML directly from the Font Awesome docs (e.g. `<i class="fa-regular fa-user"></i>`).
 - SVG-only. No additional CSS or JavaScript is added.
 - Optimized: Using an icon more than once will de-duplicate the SVG code for you and only include it once.
-- Choose from any of the 2000+ free icons provided by Font Awesome or optionally add Pro sets too.
+- Choose from any of the 2000+ free icons provided by Font Awesome (currently v6) or optionally add Pro sets too.
 
 ## Usage
 
