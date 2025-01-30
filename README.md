@@ -4,6 +4,8 @@ Optimized per-page tree-shaken SVG spritesheets for Eleventy with Font Awesome i
 
 _**Experimental: requires Eleventy v3.0.1-alpha.4 and newer.**_
 
+* Currently used in production on [11ty.dev](https://www.11ty.dev/) and [zachleat.com](https://www.zachleat.com/)
+
 ## Features
 
 - Creates a customized per-page de-duplicated SVG sprite-sheet for _any_ template in Eleventy that outputs HTML (yes, even Markdown).
@@ -97,6 +99,10 @@ export default function(eleventyConfig) {
 	eleventyConfig.addPlugin(fontAwesomePlugin)
 };
 ```
+
+##### Handling conflicts
+
+This plugin will work alongside and play nicely with existing Font Awesome clientside JavaScript. If your Eleventy plugin bundle does not include an icon it will fail gracefully to be picked up by the clientside Font Awesome JavaScript library.
 
 #### Use an Eleventy Shortcode
 
