@@ -1,3 +1,4 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
 import { Transform } from "./src/transform.js";
 
 import { mergeAttrs, attrsToHtml, faIconToHtml } from "./src/icon-to-html.js";
