@@ -4,11 +4,21 @@ import matchHelper from "posthtml-match-helper";
 import { mergeAttrs, faIconToHtml } from "./icon-to-html.js";
 import PREFIXES from "./prefixes.js";
 
+const VALID_CLASSES = [
+	"fa-fw"
+]
+
 const debug = debugUtil("Eleventy:FontAwesome");
 
 function filterAttrs(attrs = {}) {
 	if(attrs.class && typeof attrs.class === "string") {
-		let newClass = attrs.class.split(" ").filter(cls => !cls.startsWith("fa-")).join(" ");
+		let newClass = attrs.class.split(" ").filter(cls => {
+			if(VALID_CLASSES.includes(cls)) {
+				return true;
+			}
+
+			return !cls.startsWith("fa-");
+		}).join(" ");
 		if(newClass) {
 			attrs.class = newClass;
 		} else {
@@ -18,11 +28,13 @@ function filterAttrs(attrs = {}) {
 	return attrs;
 }
 
-function classToIconSelector(className = "") {
+function findIconMetadata(className = "") {
 	let classes = className.split(" ");
 	let style;
 	let family = "classic"; // optional, defaults to classic
 	let iconName;
+	let extras = new Set();
+
 	for(let cls of classes) {
 		if(!cls.startsWith("fa-")) {
 			continue;
@@ -33,11 +45,18 @@ function classToIconSelector(className = "") {
 			style = cls;
 		} else if(PREFIXES.families.includes(cls)) {
 			family = cls;
-		} else {
+		} else if(VALID_CLASSES.includes(cls)) {
+			extras.add(cls);
+		} else if(!iconName || cls.length > iconName.length) {
 			iconName = cls;
 		}
 	}
 
+	return { style, family, iconName, extras }
+}
+
+function classToIconSelector(className = "") {
+	const { style, family, iconName } = findIconMetadata(className);
 	if(style && family && iconName) {
 		let prefix = PREFIXES.map[family][style];
 		return `${prefix}:${iconName}`;
@@ -81,7 +100,9 @@ function Transform(eleventyConfig, options = {}) {
 							}
 						} catch(e) {
 							if(options.failOnError) {
-								throw e;
+								throw new Error(`Error with icon, via class="${node?.attrs?.class || "(unknown)"}". Resolved to: ${JSON.stringify(findIconMetadata(node.attrs.class))}. Original error message: ${e.message}`, {
+									cause: e
+								});
 							} else {
 								debug("Could not find icon: %o (ignoring via `failOnError` option)", selector);
 								return node;
