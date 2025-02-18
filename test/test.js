@@ -45,7 +45,7 @@ test("Transform using a missing (pro) icon with fail on error", async t => {
 	elev.disableLogger();
 
 	let e = await t.throwsAsync(() => elev.toJSON());
-	t.is(e.originalError.originalError.message, `Could not find icon: fas:left`);
+	t.is(e.originalError.originalError.message, `Error with icon, via class="fa-solid fa-left". Resolved to: {"style":"solid","family":"classic","iconName":"left","extras":{}}. Original error message: Could not find icon: fas:left`);
 });
 
 test("Transform is working in layout", async t => {
