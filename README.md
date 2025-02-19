@@ -69,7 +69,10 @@ import { fasr } from "@fortawesome/sharp-regular-svg-icons";
 import { fasl } from "@fortawesome/sharp-light-svg-icons";
 import { fast } from "@fortawesome/sharp-thin-svg-icons";
 import { fasds } from "@fortawesome/sharp-duotone-solid-svg-icons";
+import { all } from '@awesome.me/kit-KIT_CODE/icons'
+```
 
+```js
 export default function(eleventyConfig) {
 	eleventyConfig.addPlugin(fontAwesomePlugin, {
 		sets: [fas, far, fal, fat, fad, fass, fasr, fasl, fast, fasds],
@@ -80,20 +83,10 @@ export default function(eleventyConfig) {
 Alternatively, you can [add to the Font Awesome library directly](https://docs.fontawesome.com/apis/javascript/icon-library#adding-icons-to-the-library):
 
 ```js
-import fontAwesomePlugin from "@11ty/font-awesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/pro-solid-svg-icons";
-import { far } from "@fortawesome/pro-regular-svg-icons";
-import { fal } from "@fortawesome/pro-light-svg-icons";
-import { fat } from "@fortawesome/pro-thin-svg-icons";
-import { fad } from "@fortawesome/pro-duotone-svg-icons";
-import { fass } from "@fortawesome/sharp-solid-svg-icons";
-import { fasr } from "@fortawesome/sharp-regular-svg-icons";
-import { fasl } from "@fortawesome/sharp-light-svg-icons";
-import { fast } from "@fortawesome/sharp-thin-svg-icons";
-import { fasds } from "@fortawesome/sharp-duotone-solid-svg-icons";
-
 library.add(fas, far, fal, fat, fad, fass, fasr, fasl, fast, fasds);
+
+// Kit icons
+library.add(...all);
 
 export default function(eleventyConfig) {
 	eleventyConfig.addPlugin(fontAwesomePlugin)

@@ -4,20 +4,46 @@ import matchHelper from "posthtml-match-helper";
 import { mergeAttrs, faIconToHtml } from "./icon-to-html.js";
 import PREFIXES from "./prefixes.js";
 
-const VALID_CLASSES = [
-	"fa-fw"
-]
+const PRESERVED_CLASSES = new Set([
+	// fixed width
+	"fa-fw",
+
+	// Sizing: https://docs.fontawesome.com/web/style/size
+	// Relative sizing
+	"fa-2xs",
+	"fa-xs",
+	"fa-sm",
+	"fa-lg",
+	"fa-xl",
+	"fa-2xl",
+	// Literal sizing
+	"fa-1x",
+	"fa-2x",
+	"fa-3x",
+	"fa-4x",
+	"fa-5x",
+	"fa-6x",
+	"fa-7x",
+	"fa-8x",
+	"fa-9x",
+	"fa-10x",
+]);
+
+const VALID_PREFIXES = new Set(PREFIXES.prefixes);
 
 const debug = debugUtil("Eleventy:FontAwesome");
 
 function filterAttrs(attrs = {}) {
 	if(attrs.class && typeof attrs.class === "string") {
 		let newClass = attrs.class.split(" ").filter(cls => {
-			if(VALID_CLASSES.includes(cls)) {
+			if(PRESERVED_CLASSES.has(cls)) {
 				return true;
 			}
+			if(VALID_PREFIXES.has(cls) || cls.startsWith("fa-")) {
+				return false;
+			}
 
-			return !cls.startsWith("fa-");
+			return true;
 		}).join(" ");
 		if(newClass) {
 			attrs.class = newClass;
@@ -28,37 +54,62 @@ function filterAttrs(attrs = {}) {
 	return attrs;
 }
 
+function isAnEligibleIconByClassName(className = "", ignores = []) {
+	let s = className.split(" ");
+	if(s.find(cls => ignores.includes(cls))) {
+		return false;
+	}
+	return s.find(cls => {
+		return cls.startsWith("fa-") || VALID_PREFIXES.has(cls)
+	});
+}
+
 function findIconMetadata(className = "") {
 	let classes = className.split(" ");
 	let style;
 	let family = "classic"; // optional, defaults to classic
+	let prefix;
 	let iconName;
-	let extras = new Set();
 
 	for(let cls of classes) {
+		// Pro icons
+		if(VALID_PREFIXES.has(cls)) {
+			prefix = cls;
+			family = PREFIXES.prefixToFamilyStyleMap[cls].family;
+			style = PREFIXES.prefixToFamilyStyleMap[cls].style;
+		}
+
 		if(!cls.startsWith("fa-")) {
 			continue;
 		}
+
 		cls = cls.slice("fa-".length);
 
 		if(PREFIXES.styles.includes(cls)) {
-			style = cls;
+			if(!prefix) {
+				style = cls;
+			}
 		} else if(PREFIXES.families.includes(cls)) {
-			family = cls;
-		} else if(VALID_CLASSES.includes(cls)) {
-			extras.add(cls);
+			if(!prefix) {
+				family = cls;
+			}
+		} else if(PRESERVED_CLASSES.has(cls)) {
+			// do nothing
 		} else if(!iconName || cls.length > iconName.length) {
 			iconName = cls;
 		}
 	}
 
-	return { style, family, iconName, extras }
+	if(!prefix && style && family) {
+		prefix = PREFIXES.familyStyleToPrefixMap[family][style];
+	}
+
+	return { prefix, style, family, iconName };
 }
 
 function classToIconSelector(className = "") {
-	const { style, family, iconName } = findIconMetadata(className);
-	if(style && family && iconName) {
-		let prefix = PREFIXES.map[family][style];
+	const { prefix, iconName } = findIconMetadata(className);
+	if(prefix && iconName) {
 		return `${prefix}:${iconName}`;
 	}
 }
@@ -77,9 +128,13 @@ function Transform(eleventyConfig, options = {}) {
 			let pageUrl = context?.url;
 			return function (tree, ...args) {
 				tree.match(matchHelper(transformSelector), function (node) {
-					let selector = classToIconSelector(node.attrs.class);
-					if(selector) {
+					if(isAnEligibleIconByClassName(node.attrs.class, options.ignoredClasses)) {
 						try {
+							let selector = classToIconSelector(node.attrs.class);
+							if(!selector) {
+								throw new Error("Could not find icon: " + node.attrs.class);
+							}
+
 							let { ref, html } = faIconToHtml(selector);
 							if(pageUrl && managers[bundleName] && html) {
 								managers[bundleName].addToPage(pageUrl, [ html ]);
@@ -104,7 +159,7 @@ function Transform(eleventyConfig, options = {}) {
 									cause: e
 								});
 							} else {
-								debug("Could not find icon: %o (ignoring via `failOnError` option)", selector);
+								debug(`Could not find icon for class="%o" (ignoring via \`failOnError\` option)`, node?.attrs?.class);
 								return node;
 							}
 						}
@@ -117,4 +172,4 @@ function Transform(eleventyConfig, options = {}) {
 	);
 }
 
-export { Transform };
+export { filterAttrs, findIconMetadata, Transform };

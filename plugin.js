@@ -13,6 +13,7 @@ export default function(eleventyConfig, pluginOptions = {}) {
 		transform: "i[class]", // Selector for icons, falsy to disable
 		shortcode: false, // Optional shortcode name
 		defaultAttributes: {},
+		ignoredClasses: [],
 	}, pluginOptions);
 
 	if(!options.bundle || typeof options.bundle !== "string") {
