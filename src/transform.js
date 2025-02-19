@@ -139,18 +139,39 @@ function Transform(eleventyConfig, options = {}) {
 							if(pageUrl && managers[bundleName] && html) {
 								managers[bundleName].addToPage(pageUrl, [ html ]);
 
+								let attrs = mergeAttrs(node.attrs, options.defaultAttributes);
+								let content = [];
+
+								// set generateId to falsy to disable this feature.
+								if(typeof options.generateId === "function" && Array.isArray(node?.content) && node.content.length > 0) {
+									// See https://docs.fontawesome.com/web/dig-deeper/accessibility#making-icons-accessible-manually
+									let id = options.generateId();
+									attrs["aria-labelledby"] = id;
+									attrs.role = "img";
+
+									delete attrs["aria-hidden"];
+
+									content.push({
+										tag: "title",
+										attrs: {
+											id,
+										},
+										content: [...node?.content],
+									});
+								}
+
+								content.push({
+									tag: "use",
+									attrs: {
+										href: `#${ref}`,
+										"xlink:href": `#${ref}`,
+									}
+								});
+
 								return {
 									tag: "svg",
-									attrs: filterAttrs(mergeAttrs(node.attrs, options.defaultAttributes)),
-									content: [
-										{
-											tag: "use",
-											attrs: {
-												href: `#${ref}`,
-												"xlink:href": `#${ref}`,
-											}
-										}
-									]
+									attrs: filterAttrs(attrs),
+									content,
 								};
 							}
 						} catch(e) {

@@ -1,4 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { nanoid } from "nanoid";
 import { Transform } from "./src/transform.js";
 
 import { mergeAttrs, attrsToHtml, faIconToHtml } from "./src/icon-to-html.js";
@@ -12,8 +13,11 @@ export default function(eleventyConfig, pluginOptions = {}) {
 		bundle: "fontawesome",
 		transform: "i[class]", // Selector for icons, falsy to disable
 		shortcode: false, // Optional shortcode name
-		defaultAttributes: {},
+		defaultAttributes: {
+			"aria-hidden": "true",
+		},
 		ignoredClasses: [],
+		generateId: () => `fa11-text-${nanoid()}`,
 	}, pluginOptions);
 
 	if(!options.bundle || typeof options.bundle !== "string") {
