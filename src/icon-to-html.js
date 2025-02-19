@@ -39,7 +39,7 @@ function faIconToHtml(selector) {
 	}
 
 	return {
-		ref: `${iconDef.prefix}-fa-${iconName}`,
+		ref: `${iconDef.prefix}-fa-${iconDef.iconName}`,
 		html: html.join(""),
 	}
 }
