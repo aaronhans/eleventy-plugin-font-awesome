@@ -201,3 +201,21 @@ test("Disable accessible text", async t => {
 	t.is(result.content, `<svg aria-hidden="true"><use href="#fas-fa-shirt" xlink:href="#fas-fa-shirt"></use></svg>
 <svg style="display: none;"><symbol aria-hidden="true" focusable="false" data-prefix="fas" data-icon="shirt" class="svg-inline--fa fa-shirt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" id="fas-fa-shirt"><path fill="currentColor" d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0l12.6 0c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7 480 448c0 35.3-28.7 64-64 64l-192 0c-35.3 0-64-28.7-64-64l0-250.3-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0l12.6 0z"></path></symbol></svg>`);
 });
+
+test("Opt-out of xlink:href attributes", async t => {
+	let elev = new Eleventy("./test/virtual/", "./_site", {
+		config: function(eleventyConfig) {
+			eleventyConfig.addPlugin(fontAwesomePlugin, {
+				useXlinkHref: false,
+				// generateId: () => `demo-static-id`, // override for test
+			});
+
+			eleventyConfig.addTemplate("index.njk", `<i class="fa-regular fa-user"></i>
+{% getBundle "fontawesome" %}`);
+		}
+	});
+
+	let [result] = await elev.toJSON();
+	t.is(result.content, `<svg aria-hidden="true"><use href="#far-fa-user"></use></svg>
+<svg style="display: none;"><symbol aria-hidden="true" focusable="false" data-prefix="far" data-icon="user" class="svg-inline--fa fa-user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" id="far-fa-user"><path fill="currentColor" d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"></path></symbol></svg>`);
+});

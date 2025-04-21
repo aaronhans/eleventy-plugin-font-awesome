@@ -115,6 +115,14 @@ function classToIconSelector(className = "") {
 }
 
 function Transform(eleventyConfig, options = {}) {
+	// options.transform (transform selector)
+	// options.bundle (bundle name)
+	// options.ignoredClasses (array to filter out nodes that have these classes)
+	// options.generateId (function to return an `id` attribute string)
+	// options.defaultAttributes (object)
+	// options.failOnError
+	// options.useXlinkHref
+
 	let transformSelector = options.transform || "i[class]";
 	let bundleName = options.bundle;
 	let managers = eleventyConfig.getBundleManagers();
@@ -160,15 +168,18 @@ function Transform(eleventyConfig, options = {}) {
 									});
 								}
 
+								let svgAttributes = {
+									href: `#${ref}`,
+								};
+
 								if(options.useXlinkHref) {
-									content.push({
-										tag: "use",
-										attrs: {
-											href: `#${ref}`,
-											"xlink:href": `#${ref}`,
-										}
-									});
+									svgAttributes["xlink:href"] = `#${ref}`;
 								}
+
+								content.push({
+									tag: "use",
+									attrs: svgAttributes,
+								});
 
 								return {
 									tag: "svg",
