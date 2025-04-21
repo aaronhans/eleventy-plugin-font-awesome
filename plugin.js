@@ -18,6 +18,10 @@ export default function(eleventyConfig, pluginOptions = {}) {
 		},
 		ignoredClasses: [],
 		generateId: () => `fa11-text-${nanoid()}`,
+
+		// https://docs.fontawesome.com/web/add-icons/svg-symbols#what-about-xlinkhref-what-happened-to-that
+		// https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/xlink:href versus https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/href#svg.elements.use.href
+		useXlinkHref: true, // use xlink:href for further backwards compat
 	}, pluginOptions);
 
 	if(!options.bundle || typeof options.bundle !== "string") {

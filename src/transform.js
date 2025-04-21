@@ -160,13 +160,15 @@ function Transform(eleventyConfig, options = {}) {
 									});
 								}
 
-								content.push({
-									tag: "use",
-									attrs: {
-										href: `#${ref}`,
-										"xlink:href": `#${ref}`,
-									}
-								});
+								if(options.useXlinkHref) {
+									content.push({
+										tag: "use",
+										attrs: {
+											href: `#${ref}`,
+											"xlink:href": `#${ref}`,
+										}
+									});
+								}
 
 								return {
 									tag: "svg",
