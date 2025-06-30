@@ -40,7 +40,7 @@ function faIconToHtml(selector) {
 
 	return {
 		ref: `${iconDef.prefix}-fa-${iconDef.iconName}`,
-		html: html.join(""),
+		html: html.join("").replace(/\s+class="[^"]*"/g, ''),
 	}
 }
 

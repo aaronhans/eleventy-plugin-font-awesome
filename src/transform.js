@@ -40,7 +40,7 @@ function filterAttrs(attrs = {}) {
 				return true;
 			}
 			if(VALID_PREFIXES.has(cls) || cls.startsWith("fa-")) {
-				return false;
+				return true;
 			}
 
 			return true;
